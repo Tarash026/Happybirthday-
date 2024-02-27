@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hangman Game</title>
+  <style>
+    /* Add your CSS styling here */
+    canvas {
+      border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hangman Game</h1>
+  <div id="welcomeMessage">Hello, welcome to the Hangman game! Guess all the words correctly to see the secret message.</div>
+  <canvas id="hangmanCanvas" width="400" height="400"></canvas>
+  <div id="word"></div>
+  <div id="description"></div>
+  <div id="attempts">Attempts left: <span id="attemptCount">6</span></div>
+  <div id="score">Words guessed: <span id="wordsGuessed">0</span></div>
+  <input type="text" id="guessInput" placeholder="Enter a letter" onkeydown="if(event.keyCode==13) checkGuess()">
+  <!-- Use onkeydown event to trigger checkGuess() when Enter key is pressed -->
+  <button onclick="checkGuess()">Guess</button>
+
+  <script>
+    // JavaScript code
+    let words = [
+      { word: "hydrangea", description: "Flower" },
+      { word: "flower", description: "Plant" },
+      { word: "bloom", description: "Stage of flower growth" },
+      { word: "seas", description: "Large bodies of saltwater" },
+      { word: "home", description: "Place of residence" },
+      { word: "land", description: "Earth's surface" },
+      { word: "bay", description: "Body of water surrounded by land" },
+      { word: "soil", description: "Earth or dirt" },
+      { word: "pink", description: "Color" },
+      { word: "blue", description: "Color" },
+      { word: "smart", description: "Intelligent" },
+      { word: "funny", description: "Humorous" },
+      { word: "charming", description: "Attractive and pleasing" },
+      { word: "laughter", description: "Sound of amusement" },
+      { word: "tears", description: "Droplets from the eyes when crying" },
+      { word: "joy", description: "Happiness" },
+      { word: "gloom", description: "Darkness or sadness" },
+      { word: "happiness", description: "State of being happy" },
+      { word: "love", description: "Strong affection or fondness" },
+      { word: "dreaming", description: "Activity that occurs during sleep" }
+    ];
+
+    let chosenWord;
+    let wordDescription;
+    let guessedLetters = [];
+    let attemptsLeft = 6;
+    let wordsGuessed = 0;
+    const maxWordsToGuess = 8;
+
+    function displayWord() {
+      let display = '';
+      for (const letter of chosenWord) {
+        if (guessedLetters.includes(letter) || guessedLetters.includes(letter.toUpperCase())) {
+          display += letter + ' ';
+        } else {
+          display += '_ ';
+        }
+      }
+      document.getElementById('word').textContent = display;
+      document.getElementById('description').textContent = "Description: " + wordDescription;
+    }
+
+    function checkGuess() {
+      const guess = document.getElementById('guessInput').value.toLowerCase();
+      document.getElementById('guessInput').value = '';
+
+      if (!chosenWord.includes(guess) && !chosenWord.includes(guess.toUpperCase())) {
+        attemptsLeft--;
+        document.getElementById('attemptCount').textContent = attemptsLeft;
+        drawHangman();
+      }
+
+      guessedLetters.push(guess);
+      displayWord();
+
+      if (attemptsLeft === 0) {
+        alert('You lost! The word was: ' + chosenWord);
+        resetGame();
+      } else if (!document.getElementById('word').textContent.includes('_')) {
+        wordsGuessed++;
+        document.getElementById('wordsGuessed').textContent = wordsGuessed;
+        if (wordsGuessed < maxWordsToGuess) {
+          alert('Congratulations! You guessed the word: ' + chosenWord + '\nYou have ' + (maxWordsToGuess - wordsGuessed) + ' words left to guess.');
+          resetWord();
+        } else {
+          // Redirect to new3.html when all words are guessed correctly
+          window.location.href = "file:///C:/Users/thara/new3.html";
+        }
+      }
+    }
+
+    function drawGallow() {
+      const canvas = document.getElementById('hangmanCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.moveTo(20, 380);
+      ctx.lineTo(380, 380);
+      ctx.moveTo(50, 380);
+      ctx.lineTo(50, 50);
+      ctx.lineTo(200, 50);
+      ctx.lineTo(200, 100);
+      ctx.stroke();
+    }
+
+    function drawHead() {
+      const canvas = document.getElementById('hangmanCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.arc(200, 130, 30, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    function drawBody() {
+      const canvas = document.getElementById('hangmanCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.moveTo(200, 160);
+      ctx.lineTo(200, 260);
+      ctx.stroke();
+    }
+
+    function drawLeftArm() {
+      const canvas = document.getElementById('hangmanCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.moveTo(200, 180);
+      ctx.lineTo(150, 220);
+      ctx.stroke();
+    }
+
+    function drawRightArm() {
+      const canvas = document.getElementById('hangmanCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.moveTo(200, 180);
+      ctx.lineTo(250, 220);
+      ctx.stroke();
+    }
+
+    function drawLeftLeg() {
+      const canvas = document.getElementById('hangmanCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.moveTo(200, 260);
+      ctx.lineTo(150, 320);
+      ctx.stroke();
+    }
+
+    function drawRightLeg() {
+      const canvas = document.getElementById('hangmanCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.moveTo(200, 260);
+      ctx.lineTo(250, 320);
+      ctx.stroke();
+    }
+
+    function drawHangman() {
+      const canvas = document.getElementById('hangmanCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      drawGallow();
+
+      switch (attemptsLeft) {
+        case 6:
+          break;
+        case 5:
+          drawHead();
+          break;
+        case 4:
+          drawHead();
+          drawBody();
+          break;
+        case 3:
+          drawHead();
+          drawBody();
+          drawLeftArm();
+          break;
+        case 2:
+          drawHead();
+          drawBody();
+          drawLeftArm();
+          drawRightArm();
+          break;
+        case 1:
+          drawHead();
+          drawBody();
+          drawLeftArm();
+          drawRightArm();
+          drawLeftLeg();
+          break;
+        case 0:
+          drawHead();
+          drawBody();
+          drawLeftArm();
+          drawRightArm();
+          drawLeftLeg();
+          drawRightLeg();
+          break;
+      }
+    }
+
+    function resetWord() {
+      const randomIndex = Math.floor(Math.random() * words.length);
+      chosenWord = words[randomIndex].word;
+      wordDescription = words[randomIndex].description;
+      // Remove the chosen word from the array
+      words.splice(randomIndex, 1);
+      guessedLetters = [];
+      attemptsLeft = 6;
+      document.getElementById('attemptCount').textContent = attemptsLeft;
+      displayWord();
+      drawHangman();
+      giveInitialHint(); // Update initial hint after resetting the word
+    }
+
+    function resetGame() {
+      words = [...originalWords]; // Reset the words array
+      resetWord();
+      wordsGuessed = 0;
+      document.getElementById('wordsGuessed').textContent = wordsGuessed;
+      document.getElementById('welcomeMessage').style.display = 'block';
+    }
+
+    function giveInitialHint() {
+      if (chosenWord.length > 4) {
+        document.getElementById('guessInput').placeholder = "Enter one of: " + chosenWord[0] + " or " + chosenWord[1];
+      } else {
+        document.getElementById('guessInput').placeholder = "Enter: " + chosenWord[0];
+      }
+    }
+
+    function showSecretMessage() {
+      document.getElementById('welcomeMessage').textContent = "Congratulations! You've guessed all the words correctly. Here's the secret message: [SECRET MESSAGE]";
+    }
+
+    function selectRandomWord() {
+      resetGame();
+    }
+
+    // Initialize the game
+    const originalWords = [...words]; // Copy of the original words array
+    selectRandomWord();
+  </script>
+</body>
+</html>

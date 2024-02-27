@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ForUE</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+  body, html {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      transition: background-image 1s ease-in-out;
+      font-family: 'Courier New', Courier, monospace;
+      background-size: cover; /* Cover the entire background */
+      background-position: center;
+  }
+
+@keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  #output {
+      overflow: hidden;
+      white-space: nowrap;
+      display: inline-block;
+      animation: typing 5s steps(40, end); 
+      max-width: 100%; /* Limit the width of the output div */
+  }
+
+  /* Added CSS for fade-in effect */
+  #output img {
+  
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+	  margin-bottom : 20px;
+      max-width: 300px; /* Ensure the image fits within the container */
+      height: 350px; /* Maintain aspect ratio */
+  }
+
+  #output img.fade-out {
+      opacity: 0;
+  }
+
+  #output img.fade-in {
+      opacity: 1;
+  }
+
+  /* Added CSS for fade-in effect on text */
+  #output .text {
+	 overflow: hidden; /* Hide any overflow */
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow-wrap: break-word; /* Allow long words to break and wrap */
+  text-overflow: ellipsis; /* Display an ellipsis (...) when text overflows */
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      margin-top: 3px; /* Adjust margin as needed */
+      width: 100%;
+      color: #f5f5dc;
+      font-style: italic;
+      font-weight: bold; /* Italic style */
+  }
+  @media only screen and (max-width: 600px) {
+  #output .text {
+    font-size: 12px; /* Adjust font size for smaller screens */
+    white-space: normal; /* Allow text to wrap */
+    text-indent: 1em; /* Add an indent when text wraps */
+    text-align: justify; /* Justify text for better readability */
+  }
+}
+
+  #output .text.fade-in {
+      opacity: 1;
+  }
+
+  /* Container for text and buttons */
+  .container {
+      position: relative;
+      text-align: center;
+      margin-top: 20px; /* Adjust margin as needed */
+      max-width: 100%; /* Limit the width of the container */
+  }
+
+  /* Button styles */
+  .button-container button {
+      margin-top: 20px; /* Adjust margin as needed */
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: white;
+      color: black;
+      font-size: 16px;
+      font-family: 'Montserrat', sans-serif; /* Apply Roboto font */
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      display: inline-block; /* Make the buttons behave as inline elements */
+  }
+
+  .button-container button:hover {
+      background-color: #45a049;
+  }
+
+  .button-container button:focus {
+      outline: none;
+  }
+
+  .audio-container {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+  }
+
+
+</style>
+</head>
+<body>
+  <div class="audio-container">
+      <iframe id="audioPlayer" width="75" height="60" src="https://vocaroo.com/embed/17bqmwzbaYQw?autoplay=0" frameborder="0" allow="autoplay"></iframe>
+  </div>
+
+  <div class="container">
+    <div id="output">
+</div>
+      <div class="button-container">
+        <button id="changeColorBtn" onclick="changeColor()">Message</button>
+        <button id="changeToImageBtn" style="display: none;" onclick="changeToImage()">Happy Birthday</button>
+      </div>
+      </div>
+
+      <script>
+      function changeColor() {
+        var outputDiv = document.getElementById('output');
+        
+        // Add the poem text
+        outputDiv.innerHTML = `
+          <div class="text">
+            <i>Many timezones away from southerneast<br>
+            a land down under between two seas<br>
+            Exist a flower blooming beautiful hues<br>
+            A hydrangea, much like you.<br><br>
+            Oceans wide apart from the place you used to stay<br>
+            A place you called home , A place further away<br>
+            An unfamiliar land and an unfamiliar bay<br>
+            I hope you're doing fine, I hope you're doing okay.<br><br>
+            You know, much like hydrangea, you'll always bloom<br>
+            No matter the soil, even in gloom<br>
+            On alkaline earth you blooming pink<br>
+            On acidic land you're sad, blue but still utterly breathtaking.<br><br>
+            You see, no matter where you're planted<br>
+            There'll always be aesthetic in your hues<br>
+            You're smart, funny and you are charming too<br>
+            Perharp it is real and Perharp it is true<br>
+            Perharp the dazzling hydrangea is really you.<br><br>
+            Though miles may stretch and time may pass<br>
+            I wish your vibrant hues forever last<br>
+            With each passing year, your colors bloom,<br>
+            In Laughter, in tears, in joy, in gloom.<br><br>
+            So here's to you, on your special day,<br>
+            A hydrangea in a world far away<br>
+            May happiness find you and all those you love<br>
+            And may you achieve all the that you've been dreaming of</i>
+          </div>`;
+        
+        // Trigger fade-in effect for the text
+        setTimeout(function() {
+          outputDiv.querySelector('.text').classList.add('fade-in');
+        }, 100);
+
+        // Hide the "Message" button and show the "Happy Birthday" button
+        document.getElementById('changeColorBtn').style.display = 'none';
+        document.getElementById('changeToImageBtn').style.display = 'inline-block';
+
+        // Check if the background is already an image
+        var bodyStyle = window.getComputedStyle(document.body);
+        var backgroundImage = bodyStyle.getPropertyValue('background-image');
+        if (backgroundImage !== 'none') {
+          // Background is already an image, no need to fade it in again
+          return;
+        }
+
+        // Change background image to a big image
+        document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1501577316686-a5cbf6c1df7e?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')";
+      }
+          
+      function changeToImage() {
+        var outputDiv = document.getElementById('output');
+        outputDiv.innerHTML ='<img src="https://img.hotimg.com/424427794_2073226353047657_8954628461010816606_n.jpeg" alt="Image" border="0" />';
+
+        // Change background image to a big image
+        document.body.style.backgroundImage = "url('https://images.unsplash.com/photo-1501577316686-a5cbf6c1df7e?q=80&w=2787&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')";
+
+        // Hide the "Happy Birthday" button
+        document.getElementById('changeToImageBtn').style.display = 'none';
+
+        // Add fade-in class to the image after a small delay to trigger the transition
+        setTimeout(function() {
+          var img = outputDiv.querySelector('img');
+          img.classList.add('fade-in');
+
+          // Add text below the image
+          var newText = document.createElement('div');
+          newText.className = 'text';
+          newText.innerHTML = `<div style="text-align: center;">` +
+                        `<i>Happy 17th birthday UE,<br>` +
+                        `May your journey ahead be filled <br>` +
+                        `with excitement and joys<br>` +
+                        `And just Like hydrangea, may you always find,<br>` +
+                        `Vibrant hues in all aspects of life.<br>` +
+                        `~ From Me</i>` +
+                        `</div>`;
+
+          outputDiv.appendChild(newText);
+
+          // Trigger fade-in effect for the new text
+          setTimeout(function() {
+            newText.classList.add('fade-in');
+          }, 100);
+        }, 100);
+      }
+        // Optional JavaScript for controlling audio playback (if needed)
+        var audio = document.getElementById("audioPlayer");
+        // You can use additional JavaScript to control audio playback if required
+    </script>
+  </body>
+</html>
